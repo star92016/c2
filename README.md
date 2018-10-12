@@ -1,7 +1,8 @@
 # c2语言
 a programming language from c 一个带有包，命名空间和方便定位函数变量位置的编程语言
 ### 这是它的源文件，在cn/abc/Teacher.c2
-```package cn.abc;
+```
+package cn.abc;
 //package .;//is support
 
 import cn.abc.Student;
@@ -71,4 +72,5 @@ void cn_abc_Teacher_hello(){
 	cn_abc_Teacher_say();
 	printf("%s\n",name);
 	cn_abc_Teacher_AgeType hello;
-}```
+}
+```
