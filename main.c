@@ -1,3 +1,14 @@
+/**
+package . a.b ;
+//@
+/*@*\/
+import
+#@
+namespace
+{}
+final eq=block
+"@" '@'
+*/
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
@@ -11,7 +22,7 @@
 #define CHARBUFSIZE 1024
 #define INPUTBUFSIZE 16
 
-//ÀàĞÍ¶¨Òå 
+//ç±»å‹å®šä¹‰ 
 struct String;
 typedef struct String String;
 struct Token;
@@ -35,13 +46,13 @@ struct String{
 
 
 
-//Ó¦ÓÃÃû 
+//åº”ç”¨å 
 char* appName;
-//Token Í·Î² 
+//Token å¤´å°¾ 
 Token* tokenHead,*tokenTail;
 //file
 FILE* inputFile=NULL;
-//Êä³öÄ¿Â¼ 
+//è¾“å‡ºç›®å½• 
 char* outDir;
 //mark final
 bool isFinalMarked=false;
@@ -73,7 +84,7 @@ void help(){
 	exit(1);
 }
 
-//ĞÂtoken 
+//æ–°token 
 Token* newToken(){
 	Token*t=malloc(sizeof(Token));
 	t->next=NULL;
@@ -87,7 +98,7 @@ Token* newToken(){
 	
 	return t;
 }
-//ÏÂÒ»¸ö putBackChar nextChar
+//ä¸‹ä¸€ä¸ª putBackChar nextChar
 Token* nextToken(){
 	if(currentToken&&currentToken->next){
 		currentToken=currentToken->next;
@@ -97,7 +108,7 @@ Token* nextToken(){
 	// TODO 
 	return t;
 }
-//ÉÏÒ»¸ö
+//ä¸Šä¸€ä¸ª
 Token* prevToken(){
 	if(currentToken&&currentToken->prev){
 		currentToken=currentToken->prev;
@@ -105,7 +116,7 @@ Token* prevToken(){
 	}
 	die("No Token Before (%s)\n",currentToken?(currentToken->str->data):"NULL");
 } 
-//»º´æ 
+//ç¼“å­˜ 
 void add2Buf(int ch){
 	if(charBufPos>=CHARBUFSIZE)die("No charBuf ...\n");
 	charBuf[charBufPos++]=ch;
@@ -118,7 +129,7 @@ String* newString(){
 	s->data=NULL;
 	s->realLink=NULL;
 }
-//¸´ÖÆstring
+//å¤åˆ¶string
 String* dupStringFromBuf(){
 	charBuf[charBufPos]=0;
 	if(charBufPos>0)return dupString(charBuf);
@@ -128,46 +139,46 @@ String* dupString(char*str){
 	//TODO
 	return NULL;
 }
-//ÏÂÒ»¸ö 
+//ä¸‹ä¸€ä¸ª 
 int nextChar(){
 	if(inputBufPos>0)return inputBuf[--inputBufPos];
 	return getchar();
 }
-//¹é»¹ 
+//å½’è¿˜ 
 void putBackChar(int ch){
 	if(inputBufPos>=INPUTBUFSIZE)die("too Many putBackChar\n");
 	inputBuf[inputBufPos++]=ch;
 }
 #if 0
-//±ê¼Çnamepsace 
+//æ ‡è®°namepsace 
 void markNamespace(){
 	namespaceMark=currentToken;
 }
-//¸´Ô­ 
+//å¤åŸ 
 void gotoNamespace(){
 	currentToken=namespaceMark;
 	if(!currentToken)die("Not Mark Before it \n");
 }
 #endif
-//±ê¼Çfinal
+//æ ‡è®°final
 void markFinal(){
 	isFinalMarked=true;
 } 
-//µÚÒ»´ÎÉ¨Ãè¼ÇÂ¼³ÉÔ± 
+//ç¬¬ä¸€æ¬¡æ‰«æè®°å½•æˆå‘˜ 
 void firstView(){
 	Token*t= nextToken();
 	while(t->type!=TYPE_EOF){
 		//TODO
 	}
 }
-//´Ónamespace¿ªÊ¼ 
+//ä»namespaceå¼€å§‹ 
 void secondView(){
 	//open out file
 	//gotoNamespace();
 	currentToken=tokenHead;
 	//TODO
 } 
-//Êä³öĞÂÖµ£¬Èç¹ûÓĞĞÂÖµ£¬ 
+//è¾“å‡ºæ–°å€¼ï¼Œå¦‚æœæœ‰æ–°å€¼ï¼Œ 
 void writeToken2Header(Token*tok){
 	String *s=getLinkedString(tok->str);
 	writeString2Header(s->data);
@@ -184,7 +195,7 @@ void writeString2Source(char*str){
 	if(outC==NULL)die("source File not open\n");
 	if(fwrite(str,strlen(str),1,outC)<=0)die("source File not open\n");
 }
-//±êÊ¶·ûÃû×ÖÓ³Éä°üÀ¨¾Ö²¿±äÁ¿ 
+//æ ‡è¯†ç¬¦åå­—æ˜ å°„åŒ…æ‹¬å±€éƒ¨å˜é‡ 
 void mapNewString(String *old,String *newer){
 	old->realLink=newer;
 }
@@ -192,7 +203,7 @@ void mapNewString(String *old,String *newer){
 String* getLinkedString(String*s){
 	return s->realLink?s->realLink:s;
 }
-//»ñÈ¡ºó×º 
+//è·å–åç¼€ 
 String* getSuffix(String*s){
 	char*data=s->data;
 	int i,pos=0;
@@ -202,7 +213,7 @@ String* getSuffix(String*s){
 	if(data[pos]=='.')pos++;
 	return dupString(data+pos);
 }
-//Òì³£ÍË³ö 
+//å¼‚å¸¸é€€å‡º 
 void die(const char*fmt,...){
 	//TODO
 	puts(fmt);
@@ -211,7 +222,7 @@ void die(const char*fmt,...){
 	if(outH)fclose(outH);
 	exit(1);
 }
-//½âÎö²ÎÊı£¬³õÊ¼»¯È«¾Ö±äÁ¿ 
+//è§£æå‚æ•°ï¼Œåˆå§‹åŒ–å…¨å±€å˜é‡ 
 void appInit(int argc,char**argv){
 	appName=argv[0];
 	//TODO
